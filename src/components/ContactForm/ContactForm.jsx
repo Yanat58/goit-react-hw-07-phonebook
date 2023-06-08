@@ -5,7 +5,7 @@ import Notiflix from 'notiflix';
 import { BiUserPlus } from 'react-icons/bi';
 import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactSlice';
+import { addContacts } from 'redux/operations';
 import { getContactValue } from 'redux/selectors';
 
 export const ContactForm = ({ onClose }) => {
@@ -23,11 +23,11 @@ export const ContactForm = ({ onClose }) => {
     };
 
     const nameIsExist = contacts.some(
-      contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
+      object => object.name.toLowerCase().trim() === name.toLowerCase().trim()
     );
 
     const numberIsExist = contacts.some(
-      contact => contact.number.trim() === number.trim()
+      object => object.number.trim() === number.trim()
     );
 
     if (name.trim() === '' || number.trim() === '') {
@@ -38,7 +38,7 @@ export const ContactForm = ({ onClose }) => {
     } else if (numberIsExist) {
       Notiflix.Report.warning(`This ${number} is already in contacts`);
     } else {
-      dispatch(addContact(newContact));
+      dispatch(addContacts(newContact));
     }
 
     onClose();

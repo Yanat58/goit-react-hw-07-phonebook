@@ -2,7 +2,7 @@ import React from 'react';
 import { BiUserMinus } from 'react-icons/bi';
 import css from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/contactSlice';
+import { deleteContacts } from 'redux/operations';
 import { getFilterValue } from 'redux/selectors';
 import { getContactValue } from 'redux/selectors';
 
@@ -11,15 +11,15 @@ export const ContactList = () => {
   const filter = useSelector(getFilterValue);
   console.log(contacts);
   const dispatch = useDispatch();
-  const deleteContactHandler = id => dispatch(deleteContact(id));
+  const deleteContactHandler = id => dispatch(deleteContacts(id));
 
   const filterContactHandler = () => {
     const normalizedFilter = filter.toLowerCase();
     if (!filter) {
       return contacts;
     }
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
+    return contacts.filter(object =>
+      object.name.toLowerCase().includes(normalizedFilter)
     );
   };
 
