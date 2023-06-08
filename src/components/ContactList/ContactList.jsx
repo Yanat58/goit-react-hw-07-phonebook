@@ -2,24 +2,24 @@ import React from 'react';
 import { BiUserMinus } from 'react-icons/bi';
 import css from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContacts } from 'redux/operations';
+import { deleteContact } from 'redux/operations';
 import { getFilterValue } from 'redux/selectors';
 import { getContactValue } from 'redux/selectors';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContactValue);
+  const items = useSelector(getContactValue);
   const filter = useSelector(getFilterValue);
-  console.log(contacts);
+
   const dispatch = useDispatch();
-  const deleteContactHandler = id => dispatch(deleteContacts(id));
+  const deleteContactHandler = id => dispatch(deleteContact(id));
 
   const filterContactHandler = () => {
     const normalizedFilter = filter.toLowerCase();
     if (!filter) {
-      return contacts;
+      return items;
     }
-    return contacts.filter(object =>
-      object.name.toLowerCase().includes(normalizedFilter)
+    return items.filter(item =>
+      item.name.toLowerCase().includes(normalizedFilter)
     );
   };
 

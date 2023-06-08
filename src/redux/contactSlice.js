@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchContacts } from './operations';
-import { addContacts } from './operations';
-import { deleteContacts } from './operations';
+import { addContact } from './operations';
+import { deleteContact } from './operations';
+// import { persistReducer } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
 
 // const initialState = {
 //   contacts: [
@@ -15,60 +17,65 @@ import { deleteContacts } from './operations';
 const contactSlice = createSlice({
   name: 'contacts',
   initialState: {
-    contacts: [],
+    items: [],
     isLoading: false,
     error: null,
   },
-  
-  extraRedusers: {
+
+  extraReducers: {
     [fetchContacts.pending]: state => {
       state.isloading = true;
     },
     [fetchContacts.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.contacts = action.payload;
+      state.items = action.payload;
       state.error = null;
+      console.log(action.payload);
     },
     [fetchContacts.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    [addContacts.pending]: (state)=> {
-      state.isLoading=true;
+    [addContact.pending]: state => {
+      state.isLoading = true;
     },
 
-    [addContacts.fulfilled]: (state,action)=> {
+    [addContact.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.contacts = [action.payload, ...state.contacts];
+      state.items.push(action.payload);
+      // state.items = [action.payload, ...state.items];
       state.error = null;
     },
-    [addContacts.rejected]: (state, action) => {
+    [addContact.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    [deleteContacts.pending]: (state)=> {
-      state.isLoading=true;
+    [deleteContact.pending]: state => {
+      state.isLoading = true;
     },
 
-    [deleteContacts.fulfilled]: (state,action)=> {
+    [deleteContact.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.error = null;
-      const index = state.contacts.findIndex(
-       contact=> contact.id === action.payload.id
-      );
-      state.contacts.splice(index, 1);
+      state.items = state.items.filter(item => item.id !== action.payload);
     },
-    [deleteContacts.rejected]: (state, action) => {
+    [deleteContact.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-
-
-
   },
 });
 
+// const persistConfig = {
+//   key: 'contacts',
+//   storage,
+// };
 
-export const contactReducer =  contactSlice.reducer;
+// export const ContactReducer = persistReducer(
+//   persistConfig,
+//   contactSlice.reducer
+// );
+
+export const contactReducer = contactSlice.reducer;
