@@ -9,26 +9,26 @@ import { useGetContactsByNameQuery } from 'redux/contact_api';
 export const ContactList = () => {
   const data = useGetContactsByNameQuery();
   console.log(data);
-  // const items = useSelector(selectContactValue);
-  // const filter = useSelector(selectFilterValue);
+  const items = useSelector(selectContactValue);
+  const filter = useSelector(selectFilterValue);
 
-  // const dispatch = useDispatch();
-  // const deleteContactHandler = id => dispatch(deleteContact(id));
+  const dispatch = useDispatch();
+  const deleteContactHandler = id => dispatch(deleteContact(id));
 
-  // const filterContactHandler = () => {
-  //   const normalizedFilter = filter.toLowerCase();
-  //   if (!filter) {
-  //     return items;
-  //   }
-  //   return items.filter(item =>
-  //     item.name.toLowerCase().includes(normalizedFilter)
-  //   );
-  // };
+  const filterContactHandler = () => {
+    const normalizedFilter = filter.toLowerCase();
+    if (!filter) {
+      return items;
+    }
+    return items.filter(item =>
+      item.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
   return (
     <>
       <ul className={css.contactList}>
-        {/* {filterContactHandler().map(({ id, name, number }) => (
+        {filterContactHandler().map(({ id, name, number }) => (
           <li className={css.contactItem} key={id}>
             <p className={css.contactName}>{name}:</p>
             <p className={css.contactNumber}>{number}</p>
@@ -42,7 +42,7 @@ export const ContactList = () => {
               </span>
             </button>
           </li>
-        ))} */}
+        ))}
       </ul>
     </>
   );
