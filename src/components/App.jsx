@@ -7,7 +7,7 @@ import { Layout } from './Layout/Layout';
 import { AppBar } from './AppBar/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from 'redux/operations';
-import { getError, getIsLoading } from 'redux/selectors';
+import { selectError, selectIsLoading } from 'redux/selectors';
 
 export const App = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,8 +18,8 @@ export const App = () => {
 
   const dispatch = useDispatch();
   console.log(dispatch);
-  const error = useSelector(getError);
-  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(selectError);
+  const isLoading = useSelector(selectIsLoading);
 
   useEffect(() => {
     dispatch(fetchContacts());

@@ -3,12 +3,12 @@ import { BiUserMinus } from 'react-icons/bi';
 import css from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from 'redux/operations';
-import { getFilterValue } from 'redux/selectors';
-import { getContactValue } from 'redux/selectors';
+import { selectFilterValue, selectContactValue} from 'redux/selectors';
+
 
 export const ContactList = () => {
-  const items = useSelector(getContactValue);
-  const filter = useSelector(getFilterValue);
+  const items = useSelector(selectContactValue);
+  const filter = useSelector(selectFilterValue);
 
   const dispatch = useDispatch();
   const deleteContactHandler = id => dispatch(deleteContact(id));

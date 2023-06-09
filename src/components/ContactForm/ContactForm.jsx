@@ -6,11 +6,11 @@ import { BiUserPlus } from 'react-icons/bi';
 import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/operations';
-import { getContactValue } from 'redux/selectors';
+import { selectContactValue } from 'redux/selectors';
 
 export const ContactForm = ({ onClose }) => {
   const dispatch = useDispatch();
-  const items = useSelector(getContactValue);
+  const items = useSelector(selectContactValue);
 
   const [name, setName] = React.useState('');
   const [number, setNumber] = React.useState('');
