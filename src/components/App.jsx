@@ -5,7 +5,7 @@ import { Filter } from 'components/Filter/Filter';
 import { Modal } from 'components/Modal/Modal';
 import { Layout } from './Layout/Layout';
 import { AppBar } from './AppBar/AppBar';
-import { useGetContactsByNameQuery } from 'redux/contact_api';
+import { useGetContactsQuery } from 'redux/contact_api';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchContacts } from 'redux/operations';
 // import { selectError, selectIsLoading } from 'redux/selectors';
@@ -16,7 +16,7 @@ export const App = () => {
   const toggleModal = () => {
     setShowModal(!showModal);
   };
-  const data = useGetContactsByNameQuery();
+  const data = useGetContactsQuery();
   console.log(data);
 
   return (
@@ -29,7 +29,7 @@ export const App = () => {
           </Modal>
         )}
         <Filter />
-        {data && <ContactList />}
+        {data || data.length>0 ?  <ContactList /> : <p>Contact list is empty.</p>}
       </Layout>
     </>
   );

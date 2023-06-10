@@ -4,45 +4,47 @@ import css from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 import { selectContactValue, selectFilterValue } from 'redux/selectors';
-import { useGetContactsByNameQuery } from 'redux/contact_api';
+import { useGetContactsQuery } from 'redux/contact_api';
 
 export const ContactList = () => {
-  // const data = useGetContactsByNameQuery();
+const {data: items, isLoading, error} = useGetContactsQuery();
   // console.log(data);
-  const items = useSelector(selectContactValue);
-  const filter = useSelector(selectFilterValue);
-  console.log(filter);
-  const dispatch = useDispatch();
-  const deleteContactHandler = id => dispatch(deleteContact(id));
+  // console.log(isLoading);
+  // console.log(error)
+  // const items = useSelector(selectContactValue);
+  // const filter = useSelector(selectFilterValue);
+  // console.log(filter);
+  // const dispatch = useDispatch();
+  // const deleteContactHandler = id => dispatch(deleteContact(id));
 
-  const filterContactHandler = () => {
-    const normalizedFilter = filter.toLowerCase();
-    if (!filter) {
-      return items;
-    }
-    return items.filter(item =>
-      item.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+  // const filterContactHandler = () => {
+  //   const normalizedFilter = filter.toLowerCase();
+  //   if (!filter) {
+  //     return items;
+  //   }
+  //   return items.filter(item =>
+  //     item.name.toLowerCase().includes(normalizedFilter)
+  //   );
+  // };
 
   return (
     <>
       <ul className={css.contactList}>
-        {/* {filterContactHandler().map(({ id, name, number }) => (
+        {!error && !isLoading && items.map(({ id, name, number }) => (
           <li className={css.contactItem} key={id}>
             <p className={css.contactName}>{name}:</p>
             <p className={css.contactNumber}>{number}</p>
             <button
               className={css.deletBtn}
               type="button"
-              onClick={() => deleteContactHandler(id)}
+              // onClick={() => deleteContactHandler(id)}
             >
               <span>
                 <BiUserMinus className={css.btnDeleteIcon} size={20} />
               </span>
             </button>
           </li>
-        ))} */}
+        ))}
       </ul>
     </>
   );

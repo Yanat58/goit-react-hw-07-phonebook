@@ -7,11 +7,21 @@ export const contactsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
   }),
+  tagTypes: ['Contacts'],
   endpoints: builder => ({
-    getContactsByName: builder.query({
+    getContacts: builder.query({
       query: () => `/contacts`,
+    providesTags: ['Contacts'],
     }),
+    addContact: builder.mutation({
+      query: values => ({
+        url: '/contacts',
+        method: 'POST',
+        body: values,
+      }),
+      invalidatesTags: ['Contacts'],
+    })
   }),
 });
 
-export const { useGetContactsByNameQuery } = contactsApi;
+export const { useGetContactsQuery, useAddContactMutation } = contactsApi;
