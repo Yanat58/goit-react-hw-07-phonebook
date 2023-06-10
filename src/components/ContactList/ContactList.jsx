@@ -1,13 +1,15 @@
 import React from 'react';
 import { BiUserMinus } from 'react-icons/bi';
 import css from './ContactList.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/operations';
-import { selectContactValue, selectFilterValue } from 'redux/selectors';
-import { useGetContactsQuery } from 'redux/contact_api';
+import {
+  useDeleteContactMutation,
+  useGetContactsQuery,
+} from 'redux/contact_api';
 
 export const ContactList = () => {
-const {data: items, isLoading, error} = useGetContactsQuery();
+  const { data: items, error, isLoading } = useGetContactsQuery();
+  const [deleteContact] = useDeleteContactMutation();
+
   // console.log(data);
   // console.log(isLoading);
   // console.log(error)
@@ -15,7 +17,6 @@ const {data: items, isLoading, error} = useGetContactsQuery();
   // const filter = useSelector(selectFilterValue);
   // console.log(filter);
   // const dispatch = useDispatch();
-  // const deleteContactHandler = id => dispatch(deleteContact(id));
 
   // const filterContactHandler = () => {
   //   const normalizedFilter = filter.toLowerCase();
@@ -30,21 +31,23 @@ const {data: items, isLoading, error} = useGetContactsQuery();
   return (
     <>
       <ul className={css.contactList}>
-        {!error && !isLoading && items.map(({ id, name, number }) => (
-          <li className={css.contactItem} key={id}>
-            <p className={css.contactName}>{name}:</p>
-            <p className={css.contactNumber}>{number}</p>
-            <button
-              className={css.deletBtn}
-              type="button"
-              // onClick={() => deleteContactHandler(id)}
-            >
-              <span>
-                <BiUserMinus className={css.btnDeleteIcon} size={20} />
-              </span>
-            </button>
-          </li>
-        ))}
+        {!error &&
+          !isLoading &&
+          items.map(({ id, name, phone }) => (
+            <li className={css.contactItem} key={id}>
+              <p className={css.contactName}>{name}</p>
+              <p className={css.contactNumber}>{phone}</p>
+              <button
+                className={css.deletBtn}
+                type="button"
+                onClick={() => deleteContact(id)}
+              >
+                <span>
+                  <BiUserMinus className={css.btnDeleteIcon} size={20} />
+                </span>
+              </button>
+            </li>
+          ))}
       </ul>
     </>
   );

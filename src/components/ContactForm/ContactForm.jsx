@@ -1,59 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
 import { BiUserPlus } from 'react-icons/bi';
 import css from './ContactForm.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/operations';
-import { selectContactValue } from 'redux/selectors';
-import { useAddContactMutation } from 'redux/contact_api';
+import { useAddContactMutation, useGetContactsQuery } from 'redux/contact_api';
 
 export const ContactForm = ({ onClose }) => {
-  const [addContact, result] = useAddContactMutation();
+  const [name, setName] = React.useState('');
+  const [phone, setPhone] = React.useState('');
 
-  // const dispatch = useDispatch();
-  // const items = useSelector(selectContactValue);
+  const { data: items } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
-  // const [name, setName] = React.useState('');
-  // const [number, setNumber] = React.useState('');
+  const addContactHandler = async value => {
+    const nameIsExist = items.some(
+      item => item.name.toLowerCase().trim() === name.toLowerCase().trim()
+    );
 
-  const addContactHandler = async values => {
-    // const newContact = {
-    //   id: nanoid(),
-    //   name,
-    //   number,
-    // };
-    try{
-      await addContact(values);
-      Notiflix.Notify.success(`add contact`);
-    }catch(error){
-      console.log(error.message)
-    }
+    const phoneIsExist = items.some(item => item.phone.trim() === phone.trim());
 
-    // const nameIsExist = items.some(
-    //   item => item.name.toLowerCase().trim() === name.toLowerCase().trim()
-    // );
-
-    // const numberIsExist = items.some(
-    //   item => item.number.trim() === number.trim()
-    // );
-
-    // if (name.trim() === '' || number.trim() === '') {
-    //   Notiflix.Notify.warning(`Fields must be filled`);
-    //   return;
-    // } else if (nameIsExist) {
-    //   Notiflix.Report.warning(`This ${name} is already in contacts`);
-    // } else if (numberIsExist) {
-    //   Notiflix.Report.warning(`This ${number} is already in contacts`);
-    // } else {
-    //   dispatch(addContact(newContact));
-    //   console.log(dispatch(addContact(newContact)));
-    // }
-
-    // onClose();
-    // setName('');
-    // setNumber('');
+    if (name.trim() === '' || phone.trim() === '') {
+      Notiflix.Notify.warning(`Fields must be filled`);
+      onClose();
+      setName('');
+      setPhone('');
+    } else if (nameIsExist) {
+      Notiflix.Report.warning(`This ${name} is already in contacts`);
+      onClose();
+      setName('');
+      setPhone('');
+    } else if (phoneIsExist) {
+      Notiflix.Report.warning(`This ${phone} is already in contacts`);
+      onClose();
+      setName('');
+      setPhone('');
+    } else
+      try {
+        await addContact({ name, phone }).unwrap();
+        Notiflix.Notify.success(`add contact`);
+        onClose();
+        setName('');
+        setPhone('');
+      } catch (error) {
+        console.log(error.message);
+      }
   };
 
   return (
@@ -64,26 +54,26 @@ export const ContactForm = ({ onClose }) => {
           className={css.input}
           type="text"
           name="name"
-          // value={name}
+          value={name}
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           placeholder="Enter name"
-          // onChange={e => setName(e.currentTarget.value)}
+          onChange={e => setName(e.currentTarget.value)}
         />
       </label>
       <label className={css.label}>
-        <b className={css.labelText}>Number</b>
+        <b className={css.labelText}>Phone</b>
         <input
           className={css.input}
           type="tel"
-          name="number"
-          // value={number}
+          name="phone"
+          value={phone}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           placeholder="Enter phone number"
-          // onChange={e => setNumber(e.currentTarget.value)}
+          onChange={e => setPhone(e.currentTarget.value)}
         />
       </label>
 
