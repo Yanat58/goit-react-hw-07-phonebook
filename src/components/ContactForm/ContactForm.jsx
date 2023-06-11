@@ -3,16 +3,19 @@ import PropTypes from 'prop-types';
 import Notiflix from 'notiflix';
 import { BiUserPlus } from 'react-icons/bi';
 import css from './ContactForm.module.css';
-import { useAddContactMutation, useGetContactsQuery } from 'redux/contact_api';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/operations';
+import { selectContactValue } from 'redux/selectors';
 
 export const ContactForm = ({ onClose }) => {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
+  const items = useSelector(selectContactValue);
+  const dispatch = useDispatch();
 
-  const { data: items } = useGetContactsQuery();
-  const [addContact] = useAddContactMutation();
+  const onSubmit = e => {
+    e.preventDefault();
 
-  const addContactHandler = async value => {
     const nameIsExist = items.some(
       item => item.name.toLowerCase().trim() === name.toLowerCase().trim()
     );
@@ -34,20 +37,22 @@ export const ContactForm = ({ onClose }) => {
       onClose();
       setName('');
       setPhone('');
-    } else
-      try {
-        await addContact({ name, phone }).unwrap();
-        Notiflix.Notify.success(`add contact`);
-        onClose();
-        setName('');
-        setPhone('');
-      } catch (error) {
-        console.log(error.message);
-      }
+    } else {
+      const newContact = {
+        name: setName,
+        phone: setPhone,
+      };
+      dispatch(addContact(newContact));
+
+      Notiflix.Notify.success(`Add contact`);
+      onClose();
+      setName('');
+      setPhone('');
+    }
   };
 
   return (
-    <form className={css.formBox} onSubmit={e => e.preventDefault()}>
+    <form className={css.formBox} onSubmit={e => onSubmit()}>
       <label className={css.label}>
         <b className={css.labelText}>Name</b>
         <input
@@ -77,11 +82,7 @@ export const ContactForm = ({ onClose }) => {
         />
       </label>
 
-      <button
-        className={css.btnAdd}
-        type="submit"
-        onClick={() => addContactHandler()}
-      >
+      <button className={css.btnAdd} type="submit">
         <BiUserPlus className={css.btnAddIcon} size={25} />
         <span className={css.btnAddText}>Add contact</span>
       </button>
