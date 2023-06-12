@@ -15,8 +15,8 @@ import { deleteContact } from './operations';
 // };
 // const hendleAddFulfilled = (state, action) => {
 //   state.isLoading = false;
-//   // state.items.push(action.payload);
-//   state.items = [action.payload, ...state.items];
+//   state.items.push(action.payload);
+//   // state.items = [action.payload, ...state.items];
 //   state.error = null;
 // };
 
@@ -66,9 +66,9 @@ const contactSlice = createSlice({
 
     [addContact.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.error = null;
       // state.items.push(action.payload);
       state.items = [action.payload, ...state.items];
-      state.error = null;
     },
     [addContact.rejected]: (state, action) => {
       state.isLoading = false;
@@ -82,7 +82,7 @@ const contactSlice = createSlice({
     [deleteContact.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.items = state.items.filter(item => item.id !== action.payload);
+      state.items = state.items.filter(item => item.id !== action.payload.id);
     },
     [deleteContact.rejected]: (state, action) => {
       state.isLoading = false;

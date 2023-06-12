@@ -6,21 +6,48 @@ import css from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/operations';
 import { selectContactValue } from 'redux/selectors';
+import { nanoid } from 'nanoid';
 
 export const ContactForm = ({ onClose }) => {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
+  const nameId = nanoid(5);
+  const phoneId = nanoid(5);
 
-  const onSubmit = e => {
+  // const onInputChange = event => {
+  //   const { name, value } = event.currentTarget;
+
+  //   switch (name) {
+  //     case 'name':
+  //       setName(value);
+  //       break;
+
+  //     case 'phone':
+  //       setPhone(value);
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  const handlerSubmit = e => {
     e.preventDefault();
 
+    const contact = {
+      name: name,
+      phone: phone,
+    };
+
     const nameIsExist = items.some(
-      item => item.name.toLowerCase().trim() === name.toLowerCase().trim()
+      contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
     );
 
-    const phoneIsExist = items.some(item => item.phone.trim() === phone.trim());
+    const phoneIsExist = items.some(
+      contact => contact.phone.trim() === phone.trim()
+    );
 
     if (name.trim() === '' || phone.trim() === '') {
       Notiflix.Notify.warning(`Fields must be filled`);
@@ -38,21 +65,17 @@ export const ContactForm = ({ onClose }) => {
       setName('');
       setPhone('');
     } else {
-      const newContact = {
-        name: setName,
-        phone: setPhone,
-      };
-      dispatch(addContact(newContact));
+      dispatch(addContact(contact));
 
       Notiflix.Notify.success(`Add contact`);
-      onClose();
-      setName('');
-      setPhone('');
     }
+    // onClose();
+    setName('');
+    setPhone('');
   };
 
   return (
-    <form className={css.formBox} onSubmit={e => onSubmit()}>
+    <form className={css.formBox} onSubmit={handlerSubmit}>
       <label className={css.label}>
         <b className={css.labelText}>Name</b>
         <input
@@ -64,6 +87,7 @@ export const ContactForm = ({ onClose }) => {
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           placeholder="Enter name"
+          id={nameId}
           onChange={e => setName(e.currentTarget.value)}
         />
       </label>
@@ -78,6 +102,7 @@ export const ContactForm = ({ onClose }) => {
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           placeholder="Enter phone number"
+          id={phoneId}
           onChange={e => setPhone(e.currentTarget.value)}
         />
       </label>

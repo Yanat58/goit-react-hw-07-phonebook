@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { changeFilter } from 'redux/filterSlice';
 import { selectFilterValue } from 'redux/selectors';
 import css from './Filter.module.css';
 
@@ -6,9 +7,8 @@ export const Filter = () => {
   const filter = useSelector(selectFilterValue);
   const dispatch = useDispatch();
 
-  console.log('filter:', filter);
-
-  const changeFilterHandler = () => dispatch(changeFilterHandler(filter));
+  const changeFilterHandler = e =>
+    dispatch(changeFilter(e.currentTarget.value.toLowerCase().trim()));
 
   return (
     <>

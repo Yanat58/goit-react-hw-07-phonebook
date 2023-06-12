@@ -5,20 +5,21 @@ import { useDispatch } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 import css from './ContactItem.module.css';
 
-export const ContactItem = ({ id, name, phone }) => {
+export const ContactItem = ({ item }) => {
+  // const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
-  const deleteContactHandler = () => {
-    dispatch(deleteContact(id));
-    Notiflix.Notify.success(`Delete contact`);
-  };
+
   return (
     <>
-      <p className={css.contactName}>{name}</p>
-      <p className={css.contactNumber}>{phone}</p>
+      <p className={css.contactName}>{item.name}</p>
+      <p className={css.contactNumber}>{item.phone}</p>
       <button
         className={css.deletBtn}
         type="button"
-        onClick={deleteContactHandler}
+        onClick={() => {
+          dispatch(deleteContact(item.id));
+          Notiflix.Notify.success(`Delete contact`);
+        }}
       >
         <span>
           <BiUserMinus className={css.btnDeleteIcon} size={20} />

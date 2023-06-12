@@ -1,8 +1,8 @@
 import React from 'react';
-import { ContactItem } from 'components/ContactItem/ContactItem';
 import css from './ContactList.module.css';
 import { useSelector } from 'react-redux';
 import { selectContactValue, selectFilterValue } from 'redux/selectors';
+import { ContactItem } from 'components/ContactItem/ContactItem';
 
 export const ContactList = () => {
   const items = useSelector(selectContactValue);
@@ -13,15 +13,18 @@ export const ContactList = () => {
     if (!filter) {
       return items;
     }
-    items.filter(item => item.name.toLowerCase().includes(normalizedFilter));
+    console.log(
+      items.filter(item => item.name.toLowerCase().includes(normalizedFilter))
+    );
   };
+  const filterContact = filterContactHandler();
 
   return (
     <>
       <ul className={css.contactList}>
-        {filterContactHandler()?.map(({ id, name, phone }) => (
-          <li className={css.contactItem} key={id}>
-            <ContactItem id={id} name={name} phone={phone} />
+        {filterContact.map(item => (
+          <li className={css.contactItem} key={item.id}>
+            <ContactItem item={item} />
           </li>
         ))}
       </ul>
