@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 import { fetchContacts } from './operations';
 import { addContact } from './operations';
 import { deleteContact } from './operations';
@@ -64,12 +65,18 @@ const contactSlice = createSlice({
       state.isLoading = true;
     },
 
-    [addContact.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      // state.items.push(action.payload);
-      state.items = [action.payload, ...state.items];
-    },
+    [addContact.fulfilled]:
+      // { reducer
+      (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items.push(action.payload);
+        // state.items = [action.payload, ...state.items];
+      },
+    // prepare(name, phone) {
+    //   return { id: nanoid(), name, phone };
+    // },
+    // },
     [addContact.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Notiflix from 'notiflix';
 import { BiUserPlus } from 'react-icons/bi';
@@ -9,12 +9,14 @@ import { selectContactValue } from 'redux/selectors';
 import { nanoid } from 'nanoid';
 
 export const ContactForm = ({ onClose }) => {
-  const [name, setName] = React.useState('');
-  const [phone, setPhone] = React.useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+
   const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
-  const nameId = nanoid(5);
-  const phoneId = nanoid(5);
+
+  // const nameId = nanoid(5);
+  // const phoneId = nanoid(5);
 
   // const onInputChange = event => {
   //   const { name, value } = event.currentTarget;
@@ -68,15 +70,15 @@ export const ContactForm = ({ onClose }) => {
       dispatch(addContact(contact));
 
       Notiflix.Notify.success(`Add contact`);
+      onClose();
+      setName('');
+      setPhone('');
     }
-    // onClose();
-    setName('');
-    setPhone('');
   };
 
   return (
     <form className={css.formBox} onSubmit={handlerSubmit}>
-      <label className={css.label}>
+      <label className={css.label} htmlFor="contactName">
         <b className={css.labelText}>Name</b>
         <input
           className={css.input}
@@ -87,11 +89,11 @@ export const ContactForm = ({ onClose }) => {
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           placeholder="Enter name"
-          id={nameId}
+          id="contactName"
           onChange={e => setName(e.currentTarget.value)}
         />
       </label>
-      <label className={css.label}>
+      <label className={css.label} htmlFor="contactphone">
         <b className={css.labelText}>Phone</b>
         <input
           className={css.input}
@@ -102,7 +104,7 @@ export const ContactForm = ({ onClose }) => {
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           placeholder="Enter phone number"
-          id={phoneId}
+          id="contactphone"
           onChange={e => setPhone(e.currentTarget.value)}
         />
       </label>

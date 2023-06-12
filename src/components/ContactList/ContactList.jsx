@@ -9,13 +9,14 @@ export const ContactList = () => {
   const filter = useSelector(selectFilterValue);
 
   const filterContactHandler = () => {
-    const normalizedFilter = filter.toLowerCase();
-    if (!filter) {
-      return items;
+    const normalizedFilter = filter.toLocaleLowerCase();
+    if (items) {
+      return items
+        .filter(el => el.name.toLocaleLowerCase().includes(normalizedFilter))
+        .sort((firstItem, secondItem) =>
+          firstItem.name.localeCompare(secondItem.name)
+        );
     }
-    console.log(
-      items.filter(item => item.name.toLowerCase().includes(normalizedFilter))
-    );
   };
   const filterContact = filterContactHandler();
 
