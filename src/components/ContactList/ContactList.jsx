@@ -16,7 +16,7 @@ export const ContactList = () => {
         .sort((firstItem, secondItem) =>
           firstItem.name.localeCompare(secondItem.name)
         );
-    }
+    } 
   };
   const filterContact = filterContactHandler();
 
