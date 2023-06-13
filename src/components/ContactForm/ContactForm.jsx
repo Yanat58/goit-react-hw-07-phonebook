@@ -7,14 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/operations';
 import { selectContactValue } from 'redux/selectors';
 
-
 export const ContactForm = ({ onClose }) => {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
 
   const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
-
 
   const handlerSubmit = e => {
     e.preventDefault();
@@ -29,26 +27,23 @@ export const ContactForm = ({ onClose }) => {
     );
 
     const phoneIsExist = items.some(
-      contact => contact.phone.trim() ===phone.trim()
+      contact => contact.phone.trim() === phone.trim()
     );
 
     if (name.trim() === '' || phone.trim() === '') {
       Notiflix.Notify.warning(`Fields must be filled`);
-     
     } else if (nameIsExist) {
       Notiflix.Report.warning(`This ${name} is already in contacts`);
-     
     } else if (phoneIsExist) {
       Notiflix.Report.warning(`This ${phone} is already in contacts`);
     } else {
       dispatch(addContact(contact));
 
       Notiflix.Notify.success(`Add contact`);
-      
     }
     onClose();
-     setName('');
-      setPhone('');
+    setName('');
+    setPhone('');
   };
 
   return (
@@ -91,7 +86,6 @@ export const ContactForm = ({ onClose }) => {
     </form>
   );
 };
-
 
 ContactForm.propTypes = {
   onClose: PropTypes.func.isRequired,

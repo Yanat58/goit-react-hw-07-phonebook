@@ -16,8 +16,9 @@ export const ContactItem = ({ item }) => {
         className={css.deletBtn}
         type="button"
         onClick={() => {
-          dispatch(deleteContact(item.id));
-          Notiflix.Notify.success(`Delete contact`);
+          dispatch(deleteContact(item.id))
+            .unwrap()
+            .then(() => Notiflix.Notify.failure(`Delete contact`));
         }}
       >
         <span>
