@@ -6,18 +6,21 @@ import { Modal } from 'components/Modal/Modal';
 import { Layout } from './Layout/Layout';
 import { AppBar } from './AppBar/AppBar';
 import { useDispatch, useSelector } from 'react-redux';
+import { Message } from './Message/Message';
+import { selectContactValue, selectError, selectIsLoading } from 'redux/selectors';
 import { fetchContacts } from 'redux/operations';
-import { selectError, selectIsLoading } from 'redux/selectors';
 
 export const App = () => {
   const [showModal, setShowModal] = useState(false);
   const isLoading = useSelector(selectIsLoading);
-  const isError = useSelector(selectError);
-  const dispatch = useDispatch();
+  const error = useSelector(selectError);
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+ const items = useSelector(selectContactValue);
+ const dispatch = useDispatch();
+
+ useEffect(() => {
+  dispatch(fetchContacts())
+ }, [dispatch]);
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -32,8 +35,14 @@ export const App = () => {
             <ContactForm onClose={toggleModal} />
           </Modal>
         )}
-        <Filter />
-        {!isLoading && !isError && <ContactList />}
+        {items.length===0 ?<Message/> :
+       ( <>
+         <Filter />
+         {isLoading && !error && <b>Request in progress...</b> }
+        <ContactList />
+        </>)
+        }
+       
       </Layout>
     </>
   );

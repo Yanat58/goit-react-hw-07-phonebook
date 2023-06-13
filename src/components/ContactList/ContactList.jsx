@@ -12,7 +12,7 @@ export const ContactList = () => {
     const normalizedFilter = filter.toLocaleLowerCase();
     if (items) {
       return items
-        .filter(el => el.name.toLocaleLowerCase().includes(normalizedFilter))
+        .filter(contact => contact.name.toLocaleLowerCase().includes(normalizedFilter))
         .sort((firstItem, secondItem) =>
           firstItem.name.localeCompare(secondItem.name)
         );

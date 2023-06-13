@@ -3,28 +3,7 @@ import { fetchContacts } from './operations';
 import { addContact } from './operations';
 import { deleteContact } from './operations';
 
-// const hendlePending = state => (state.isLoading = true);
-// const hendleFulfilled = (state, action) => {
-//   state.isLoading = false;
-//   state.items = action.payload;
-//   state.error = null;
-// };
-// const hendleRejected = (state, action) => {
-//   state.isLoading = false;
-//   state.error = action.payload;
-// };
-// const hendleAddFulfilled = (state, action) => {
-//   state.isLoading = false;
-//   state.items.push(action.payload);
-//   // state.items = [action.payload, ...state.items];
-//   state.error = null;
-// };
 
-// const hendleDeleteFulfilled = (state, action) => {
-//   state.isLoading = false;
-//   state.error = null;
-//   state.items = state.items.filter(item => item.id !== action.payload);
-// };
 
 const contactSlice = createSlice({
   name: 'contacts',
@@ -33,19 +12,6 @@ const contactSlice = createSlice({
     isLoading: false,
     error: null,
   },
-  // extraReducers: builder => {
-  //   builder
-  //     .addCase(fetchContacts.pending, hendlePending)
-  //     .addCase(fetchContacts.fulfilled, hendleFulfilled)
-  //     .addCase(fetchContacts.rejected, hendleRejected)
-  //     .addCase(addContact.pending, hendlePending)
-  //     .addCase(addContact.fulfilled, hendleAddFulfilled)
-  //     .addCase(addContact.rejected, hendleRejected)
-  //     .addCase(deleteContact.pending, hendlePending)
-  //     .addCase(deleteContact.fulfilled, hendleDeleteFulfilled)
-  //     .addCase(deleteContact.rejected, hendleRejected);
-  // },
-
   extraReducers: {
     [fetchContacts.pending]: state => {
       state.isLoading = true;
@@ -65,17 +31,12 @@ const contactSlice = createSlice({
     },
 
     [addContact.fulfilled]:
-      // { reducer
       (state, action) => {
         state.isLoading = false;
         state.error = null;
         state.items.push(action.payload);
-        // state.items = [action.payload, ...state.items];
+        
       },
-    // prepare(name, phone) {
-    //   return { id: nanoid(), name, phone };
-    // },
-    // },
     [addContact.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;

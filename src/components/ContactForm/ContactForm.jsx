@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Notiflix from 'notiflix';
 import { BiUserPlus } from 'react-icons/bi';
@@ -7,39 +7,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/operations';
 import { selectContactValue } from 'redux/selectors';
 
+
 export const ContactForm = ({ onClose }) => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = React.useState('');
+  const [phone, setPhone] = React.useState('');
 
   const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
 
-  // const nameId = nanoid(5);
-  // const phoneId = nanoid(5);
-
-  // const onInputChange = event => {
-  //   const { name, value } = event.currentTarget;
-
-  //   switch (name) {
-  //     case 'name':
-  //       setName(value);
-  //       break;
-
-  //     case 'phone':
-  //       setPhone(value);
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
 
   const handlerSubmit = e => {
     e.preventDefault();
 
     const contact = {
-      name: name,
-      phone: phone,
+      name,
+      phone,
     };
 
     const nameIsExist = items.some(
@@ -47,37 +29,31 @@ export const ContactForm = ({ onClose }) => {
     );
 
     const phoneIsExist = items.some(
-      contact => contact.phone.trim() === phone.trim()
+      contact => contact.phone.trim() ===phone.trim()
     );
 
     if (name.trim() === '' || phone.trim() === '') {
       Notiflix.Notify.warning(`Fields must be filled`);
-      onClose();
-      setName('');
-      setPhone('');
+     
     } else if (nameIsExist) {
       Notiflix.Report.warning(`This ${name} is already in contacts`);
-      onClose();
-      setName('');
-      setPhone('');
+     
     } else if (phoneIsExist) {
       Notiflix.Report.warning(`This ${phone} is already in contacts`);
-      onClose();
-      setName('');
-      setPhone('');
     } else {
       dispatch(addContact(contact));
 
       Notiflix.Notify.success(`Add contact`);
-      onClose();
-      setName('');
-      setPhone('');
+      
     }
+    onClose();
+     setName('');
+      setPhone('');
   };
 
   return (
     <form className={css.formBox} onSubmit={handlerSubmit}>
-      <label className={css.label} htmlFor="contactName">
+      <label className={css.label} htmlFor="idName">
         <b className={css.labelText}>Name</b>
         <input
           className={css.input}
@@ -88,11 +64,11 @@ export const ContactForm = ({ onClose }) => {
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           placeholder="Enter name"
-          id="contactName"
+          id="idName"
           onChange={e => setName(e.currentTarget.value)}
         />
       </label>
-      <label className={css.label} htmlFor="contactphone">
+      <label className={css.label} htmlFor="idPhone">
         <b className={css.labelText}>Phone</b>
         <input
           className={css.input}
@@ -103,7 +79,7 @@ export const ContactForm = ({ onClose }) => {
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           placeholder="Enter phone number"
-          id="contactphone"
+          id="idPhone"
           onChange={e => setPhone(e.currentTarget.value)}
         />
       </label>
@@ -115,6 +91,7 @@ export const ContactForm = ({ onClose }) => {
     </form>
   );
 };
+
 
 ContactForm.propTypes = {
   onClose: PropTypes.func.isRequired,

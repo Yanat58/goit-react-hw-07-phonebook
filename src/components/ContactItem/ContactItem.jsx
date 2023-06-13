@@ -6,7 +6,6 @@ import { deleteContact } from 'redux/operations';
 import css from './ContactItem.module.css';
 
 export const ContactItem = ({ item }) => {
-  // const items = useSelector(selectContactValue);
   const dispatch = useDispatch();
 
   return (
