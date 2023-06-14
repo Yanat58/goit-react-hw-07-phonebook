@@ -1,8 +1,9 @@
 .container {
   display: block;
-  width: 430px;
+  width: 490px;
   margin: 10px auto;
   padding: 10px 30px;
+  background: linear-gradient(to bottom right, #d2d8f5, #f3ceb6);
   border-radius: 18px;
   box-shadow: 0px 14px 72px 0 rgba(201, 198, 198, 0.6);
 }

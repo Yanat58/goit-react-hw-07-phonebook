@@ -3,6 +3,7 @@ import Notiflix from 'notiflix';
 import { BiUserMinus } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 import { deleteContact } from 'redux/operations';
+import person from './person.png';
 import css from './ContactItem.module.css';
 
 export const ContactItem = ({ item }) => {
@@ -10,6 +11,11 @@ export const ContactItem = ({ item }) => {
 
   return (
     <>
+      <img
+        src={item.avatar || person}
+        alt={item.name}
+        className={css.contactImg}
+      />
       <p className={css.contactName}>{item.name}</p>
       <p className={css.contactNumber}>{item.phone}</p>
       <button
@@ -18,7 +24,7 @@ export const ContactItem = ({ item }) => {
         onClick={() => {
           dispatch(deleteContact(item.id))
             .unwrap()
-            .then(() => Notiflix.Notify.failure(`Delete contact`));
+            .then(() => Notiflix.Notify.success(`Delete contact`));
         }}
       >
         <span>

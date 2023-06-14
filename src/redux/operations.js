@@ -8,6 +8,7 @@ export const fetchContacts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.get('/contacts');
+      console.log(res.data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -20,7 +21,7 @@ export const addContact = createAsyncThunk(
   async (contact, { rejectWithValue }) => {
     try {
       const res = await axios.post('/contacts', contact);
-       return res.data;;
+      return res.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
